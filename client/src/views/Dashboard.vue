@@ -146,7 +146,7 @@ export default {
     },
     fetchData: function () {
       axios
-        .get(`https://${this.apiUrl}/app`, {
+        .get(`${this.apiUrl}/app`, {
           headers: {
             Authorization: window.localStorage.getItem("cognitoIdentityToken"),
           },
@@ -157,7 +157,7 @@ export default {
     createLink: function () {
       let that = this;
       axios
-        .post(`https://${that.apiUrl}/app`, that.model, {
+        .post(`${that.apiUrl}/app`, that.model, {
           headers: {
             Authorization: window.localStorage.getItem("cognitoIdentityToken"),
           },
@@ -180,17 +180,11 @@ export default {
       let that = this;
       that.currentLink.url = that.model.url;
       axios
-        .put(
-          `https://${that.apiUrl}/app/${that.currentLink.id}`,
-          that.currentLink,
-          {
-            headers: {
-              Authorization: window.localStorage.getItem(
-                "cognitoIdentityToken"
-              ),
-            },
-          }
-        )
+        .put(`${that.apiUrl}/app/${that.currentLink.id}`, that.currentLink, {
+          headers: {
+            Authorization: window.localStorage.getItem("cognitoIdentityToken"),
+          },
+        })
         .then((response) => {
           if (response.status === 200) {
             that.toggleModal();
@@ -207,7 +201,7 @@ export default {
       if (confirm(`Are you sure you want to delete '${id}'`)) {
         let that = this;
         axios
-          .delete(`https://${that.apiUrl}/app/${id}`, {
+          .delete(`${that.apiUrl}/app/${id}`, {
             headers: {
               Authorization: window.localStorage.getItem(
                 "cognitoIdentityToken"
