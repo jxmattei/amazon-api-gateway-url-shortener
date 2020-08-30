@@ -24,23 +24,15 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. -->
         <button
           class="button is-info is-outlined is-fullwidth"
           v-on:click="toggleModal('create')"
-        >
-          New Shortcut
-        </button>
+        >New Shortcut</button>
       </div>
     </div>
 
     <div class="columns is-multiline">
-      <div
-        class="column is-one-third"
-        v-for="(link, i) in links"
-        v-bind:key="link.id"
-      >
+      <div class="column is-one-third" v-for="(link, i) in links" v-bind:key="link.id">
         <div class="card">
           <header class="card-header has-background-info">
-            <p class="card-header-title has-text-white">
-              {{ link.id }}
-            </p>
+            <p class="card-header-title has-text-white">{{ link.id }}</p>
             <a href="#" class="card-header-icon" aria-label="more options">
               <span class="icon">
                 <i class="fas fa-angle-down" aria-hidden="true"></i>
@@ -49,33 +41,16 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. -->
           </header>
           <div class="card-content">
             <div class="content">
-              <div class="text-clip" :title="link.url">
-                {{ link.url }}
-              </div>
+              <div class="text-clip" :title="link.url">{{ link.url }}</div>
               <div class="is-size-7">
                 <time>{{ link.timestamp | formatDate }}</time>
               </div>
             </div>
           </div>
           <footer class="card-footer">
-            <a
-              v-on:click="toggleModal('edit', link, i)"
-              href="#"
-              class="card-footer-item"
-              >Edit</a
-            >
-            <a
-              v-on:click="deleteLink(link.id, i)"
-              href="#"
-              class="card-footer-item"
-              >Delete</a
-            >
-            <a
-              target="_blank"
-              :href="apiUrl + '/' + link.id"
-              class="card-footer-item"
-              >Try it</a
-            >
+            <a v-on:click="toggleModal('edit', link, i)" href="#" class="card-footer-item">Edit</a>
+            <a v-on:click="deleteLink(link.id, i)" href="#" class="card-footer-item">Delete</a>
+            <a target="_blank" :href="apiUrl + '/' + link.id" class="card-footer-item">Try it</a>
           </footer>
         </div>
       </div>
@@ -90,11 +65,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. -->
             <span v-if="modalTypeCreate">Create</span>
             <span v-else>Update</span> Sliplink
           </p>
-          <button
-            class="delete"
-            v-on:click="toggleModal()"
-            aria-label="close"
-          ></button>
+          <button class="delete" v-on:click="toggleModal()" aria-label="close"></button>
         </header>
         <section class="modal-card-body">
           <div class="field">
@@ -126,16 +97,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. -->
           </p>
         </section>
         <footer class="modal-card-foot">
-          <button
-            v-if="modalTypeCreate"
-            v-on:click="createLink()"
-            class="button is-success"
-          >
-            Create
-          </button>
-          <button v-else v-on:click="updateLink()" class="button is-success">
-            Update
-          </button>
+          <button v-if="modalTypeCreate" v-on:click="createLink()" class="button is-success">Create</button>
+          <button v-else v-on:click="updateLink()" class="button is-success">Update</button>
           <button class="button" v-on:click="toggleModal()">Cancel</button>
         </footer>
       </div>
@@ -183,7 +146,7 @@ export default {
     },
     fetchData: function () {
       axios
-        .get(`${this.apiUrl}/app`, {
+        .get(`https://${this.apiUrl}/app`, {
           headers: {
             Authorization: window.localStorage.getItem("cognitoIdentityToken"),
           },
@@ -194,7 +157,7 @@ export default {
     createLink: function () {
       let that = this;
       axios
-        .post(`${that.apiUrl}/app`, that.model, {
+        .post(`https://${that.apiUrl}/app`, that.model, {
           headers: {
             Authorization: window.localStorage.getItem("cognitoIdentityToken"),
           },
@@ -217,11 +180,17 @@ export default {
       let that = this;
       that.currentLink.url = that.model.url;
       axios
-        .put(`${that.apiUrl}/app/${that.currentLink.id}`, that.currentLink, {
-          headers: {
-            Authorization: window.localStorage.getItem("cognitoIdentityToken"),
-          },
-        })
+        .put(
+          `https://${that.apiUrl}/app/${that.currentLink.id}`,
+          that.currentLink,
+          {
+            headers: {
+              Authorization: window.localStorage.getItem(
+                "cognitoIdentityToken"
+              ),
+            },
+          }
+        )
         .then((response) => {
           if (response.status === 200) {
             that.toggleModal();
@@ -238,7 +207,7 @@ export default {
       if (confirm(`Are you sure you want to delete '${id}'`)) {
         let that = this;
         axios
-          .delete(`${that.apiUrl}/app/${id}`, {
+          .delete(`https://${that.apiUrl}/app/${id}`, {
             headers: {
               Authorization: window.localStorage.getItem(
                 "cognitoIdentityToken"
