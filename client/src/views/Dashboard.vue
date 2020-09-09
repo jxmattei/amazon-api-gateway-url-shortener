@@ -45,6 +45,38 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. -->
               <div class="is-size-7">
                 <time>{{ link.timestamp | formatDate }}</time>
               </div>
+              <div id="qrcode" style="width: 100px; height: 100px; margin-top: 15px"></div>
+
+              <script type="text/javascript">
+  var qrcode = new QRCode(document.getElementById("qrcode"), {
+    width: 1200,
+    height: 1200
+  });
+
+  function makeCode() {
+    var elText = document.getElementById("text");
+
+    if (!elText.value) {
+      alert("Input a text");
+      elText.focus();
+      return;
+    }
+
+    qrcode.makeCode(elText.value);
+  }
+
+  makeCode();
+
+  $("#text")
+    .on("blur", function() {
+      makeCode();
+    })
+    .on("keydown", function(e) {
+      if (e.keyCode == 13) {
+        makeCode();
+      }
+    });
+              </script>
             </div>
           </div>
           <footer class="card-footer">
